@@ -1,5 +1,5 @@
 root = true
 
 [*.{json,html,js,ts,mjs,cjs}]
-indent_size = 2
+indent_size = 4
 indent_style = tab
