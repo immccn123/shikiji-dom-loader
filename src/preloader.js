@@ -27,13 +27,14 @@ window.ShikijiDOMLoader = new (class {
 			el.src = moduleKey;
 
 			function resolver() {
-				// document.body.removeChild(el);
+				document.body.removeChild(el);
 				resolve(self.modulesData[moduleKey]);
 				removeEventListener(
 					`_ShikijiDOMLoader__register__module__${moduleKey}`,
 					resolver
 				);
 			}
+
 			addEventListener(
 				`_ShikijiDOMLoader__register__module__${moduleKey}`,
 				resolver
