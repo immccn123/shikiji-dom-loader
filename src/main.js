@@ -1,9 +1,12 @@
 /// <reference lib="WebWorker" />
 
-import { getHighlighter } from "shikiji";
+import { createHighlighter } from "shiki";
 
 const LANGUAGE_REGEXP = /language-([\w\+]+)/;
-const highlighter = await getHighlighter();
+const highlighter = await createHighlighter({
+	themes: [],
+	langs: [],
+});
 const theme =
 	window.ShikijiDOMLoaderTheme ??
 	/** @type {import("shikiji").BundledTheme} */ (
