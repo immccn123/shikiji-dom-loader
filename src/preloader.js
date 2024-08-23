@@ -29,15 +29,12 @@ window.ShikijiDOMLoader = new (class {
 			function resolver() {
 				document.body.removeChild(el);
 				resolve(self.modulesData[moduleKey]);
-				removeEventListener(
-					`_ShikijiDOMLoader__register__module__${moduleKey}`,
-					resolver
-				);
 			}
 
 			addEventListener(
 				`_ShikijiDOMLoader__register__module__${moduleKey}`,
-				resolver
+				resolver,
+				{ once: true },
 			);
 
 			el.onerror = (e) => {
@@ -45,7 +42,15 @@ window.ShikijiDOMLoader = new (class {
 				reject(e);
 			};
 
-			document.body.appendChild(el);
+			if (document.readyState === "loading") {
+				addEventListener(
+					'DOMContentLoaded',
+					() => document.body.appendChild(el),
+					{ once: true },
+				);
+			} else {
+				document.body.appendChild(el);
+			}
 		});
 	};
 	/**
@@ -76,13 +81,11 @@ window.ShikijiDOMLoader = new (class {
 				await this.import(dep);
 			}
 			const module = this.modulesData[key];
-			(registerModule.setters[depId] ?? (() => {}))(module);
+			(registerModule.setters[depId] ?? (() => { }))(module);
 		}
 		await registerModule.execute();
 		dispatchEvent(
-			new CustomEvent(
-				`_ShikijiDOMLoader__register__module__${registerModuleKey}`
-			)
+			new CustomEvent(`_ShikijiDOMLoader__register__module__${registerModuleKey}`)
 		);
 	};
 })();
